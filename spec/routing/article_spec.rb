@@ -1,16 +1,11 @@
 require 'rails_helper'
-
-#describe 'articles routes' do
-   # it 'should route to articles index' do
-   #     #expect(gets('/articles')).to_route_to('articles#index')
-   #     puts gets('articles')
-   # end
-
     
     describe "routing to articles" do
-      it "routes /articles to articles#index" do
-        expect(get "/articles").to route_to(
-          'articles#index'
-        )
+      it 'should routes /articles to articles#index' do
+        expect(get "/articles").to route_to('articles#index')
+      end
+
+      it "should routes /show to articles#show" do
+        expect(get '/articles/1').to route_to('articles#show', id: '1')
       end
 end
