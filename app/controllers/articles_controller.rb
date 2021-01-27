@@ -2,7 +2,10 @@
 class ArticlesController < ApplicationController
 
     def index
-        render json: Article.all
+        articles = Article.newest.
+        page(params[:page]).
+        per(params[:per_page])
+        render json: articles
     end
 
     def show
