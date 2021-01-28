@@ -8,7 +8,7 @@ RSpec.describe User, type: :model do
 
       expect{
         user1 = create :user, login: nil
-      }.to raise_error
+      }.to raise_error(ActiveRecord::RecordInvalid)
 
       new_user = build :user, login: user.login
       expect(new_user).not_to be_valid

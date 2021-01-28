@@ -41,9 +41,22 @@ describe UserAuthenticator do
           allow_any_instance_of(Octokit::Client).to receive(
             :user).and_return(user_data)
         end    
-      it 'should be fine' do
-        authenticator = UserAuthenticator.new('on_time_sample_code')
+      it 'should add new user' do
+        authenticator = UserAuthenticator.new('one_time_sample_code')
         expect{ authenticator.perform }.to change{ User.count}.by(1)
+      end
+
+      it 'should use existing user' do
+        user = create :user, user_data
+        authenticator = UserAuthenticator.new('one_time_sample_code')
+        expect{ authenticator.perform }.not_to change{ User.count}
+      end
+
+      it 'should create user access token' do
+        user = create :user
+        authenticator = UserAuthenticator.new('one_time_sample_code')
+        expect{ authenticator.perform }.to change{ AccessToken.count}.by(1)
+        expect( authenticator.access_token).to be_present
       end
 
   end
