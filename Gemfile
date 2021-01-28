@@ -15,6 +15,7 @@ gem 'rspec-rails'
 gem 'factory_bot_rails'
 gem 'active_model_serializers'
 gem 'kaminari' # pagination
+gem "octokit", "~> 4.0"# oauth github
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
