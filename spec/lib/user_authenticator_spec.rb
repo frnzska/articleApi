@@ -6,7 +6,7 @@ describe UserAuthenticator do
         double("Sawyer::Resource", error: "bad_verification_code")
       }
 
-      # mock error return of Octokit
+      # mock Octokit client with a token returning an error
       before do
         allow_any_instance_of(Octokit::Client).to receive(
           :exchange_code_for_token).and_return(error)
