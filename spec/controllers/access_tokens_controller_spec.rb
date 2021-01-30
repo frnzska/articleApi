@@ -6,11 +6,37 @@ end
 
 RSpec.describe AccessTokensController, type: :controller do
     describe '#create' do
+        let(:user_data) do
+            {
+              login: 'jsmith1',
+              url: 'http://example.com',
+              avatar_url: 'http://example.com/avatar',
+              name: 'John Smith'
+            }
+        end
 
         context 'valid token' do 
-            it 'should ' do
+        # mock successful token
+            before do
+                allow_any_instance_of(Octokit::Client).to receive(
+                  :exchange_code_for_token).and_return('validaccesstoken')
+    
+                allow_any_instance_of(Octokit::Client).to receive(
+                  :user).and_return(user_data)
+              end 
+
+                it 'should return 201 for token created' do
+                    post :create, params: { code: 'someValidCode'}
+                    expect(response).to have_http_status(:created)
+                end
+
+                it 'should return something as a token' do
+                    post :create, params: { code: 'someValidCode'}
+                    user = User.find_by(login: 'jsmith1')
+                    token = user.access_token.reload.token
+                    expect(raw_json["data"]["attributes"]["token"]).to eq(token) 
+                end
             end
-        end
 
 
         context 'invalid token' do 
@@ -35,7 +61,6 @@ RSpec.describe AccessTokensController, type: :controller do
                 post :create, params: {code: 'invalid'}
                 expect(raw_json['errors']['title']).to eq('Authentication code is invalid')
             end
-
         end
     end
 end
