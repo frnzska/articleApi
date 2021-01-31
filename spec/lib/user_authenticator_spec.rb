@@ -6,13 +6,14 @@ describe UserAuthenticator do
         double("Sawyer::Resource", error: "bad_verification_code")
       }
 
-      # mock error return of Octokit
+
+    context 'when code is incorrect' do
+
+      # mock Octokit client with a token returning an error
       before do
         allow_any_instance_of(Octokit::Client).to receive(
           :exchange_code_for_token).and_return(error)
       end
-
-    context 'when code is incorrect' do
 
       it 'should raise an error' do
         authenticator = described_class.new('sample_code')
@@ -58,10 +59,6 @@ describe UserAuthenticator do
         expect{ authenticator.perform }.to change{ AccessToken.count}.by(1)
         expect( authenticator.access_token).to be_present
       end
-
-  end
-
-
-
+    end
   end
 end
