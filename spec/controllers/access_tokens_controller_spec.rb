@@ -63,4 +63,32 @@ RSpec.describe AccessTokensController, type: :controller do
             end
         end
     end
+
+    describe '#destroy' do 
+
+        context 'successful destroy' do 
+            let(:user) { create :user }
+            let(:access_token) {user.create_access_token}
+            before { request.headers['authorization'] = "Bearer #{access_token.token}" }
+
+            it 'should return 204' do
+                post :destroy
+                expect(response).to have_http_status(204)
+            end
+        end
+
+        context 'unsuccessful destroy' do 
+            
+            it 'should return 403 when resource access forbidden due to no header token' do
+                post :destroy
+                expect(response).to have_http_status(403)
+            end
+
+            before { request.headers['authorization'] = "Invalid" }
+            it 'should return 403 when invalid token in header' do
+                post :destroy
+                expect(response).to have_http_status(403)
+            end
+        end
+    end
 end
