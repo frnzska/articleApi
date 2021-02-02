@@ -24,5 +24,12 @@ class ApplicationController < ActionController::API
           }}, status: 403
     end
 
-
+    private
+    def authorize!
+        provided_token = request.authorization&.gsub(/\ABearer\s/, '') 
+        # filter in Frontend set Bearer Token from Header and if nil return nil with the & assignment
+        access_token = AccessToken.find_by(token: provided_token)
+        @current_user = access_token&.user
+        raise AuthorizationError unless @current_user
+    end
 end

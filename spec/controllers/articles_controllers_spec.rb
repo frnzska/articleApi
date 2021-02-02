@@ -60,4 +60,39 @@ describe ArticlesController do
             end
         end
     end
+
+
+    describe '#create' do
+        context 'user is not authorized' do
+            it 'should return forbidden resource accesss code when no access code in header' do
+                post :create
+                expect(response).to have_http_status(403)
+            end
+
+            before { request.headers['authorization'] = "Invalid" }
+            it 'should return forbidden resource accesss code when invalid access code in header' do
+                post :create
+                expect(response).to have_http_status(403)
+            end        
+        end
+
+        context 'user is authorized' do
+            let(:user) { create :user }
+            let(:access_token) {user.create_access_token}
+            before { request.headers['authorization'] = "Bearer #{access_token.token}" }
+
+            it 'and should return resource created code and create article' do
+                post :create, params: { "data" => { "attributes"=> 
+                    { "title" => "my test title", "content" => "my test content", "slug" => "my-test-slug"} }}
+                expect(response).to have_http_status(201)
+                
+            end
+
+            it 'but invalid parameters are provided return Unprocessable Entity Code' do
+                post :create, params: {something: "something"}
+                expect(response).to have_http_status(422)
+            end
+        
+        end
+    end
 end

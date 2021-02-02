@@ -8,4 +8,9 @@ require 'rails_helper'
       it "should routes /show to articles#show" do
         expect(get '/articles/1').to route_to('articles#show', id: '1')
       end
+
+      it "should routes /create to articles#create" do
+        expect(post '/articles').to route_to('articles#create')
+      end
+
 end

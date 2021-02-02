@@ -79,7 +79,7 @@ RSpec.describe AccessTokensController, type: :controller do
 
         context 'unsuccessful destroy' do 
             
-            it 'should return 403 when resource access forbidden due to no header token' do
+            it 'should return 403 when resource access forbidden due to no header token set.' do
                 post :destroy
                 expect(response).to have_http_status(403)
             end
