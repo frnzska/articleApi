@@ -4,6 +4,6 @@ FactoryBot.define do
     sequence(:name) { |n| "name #{n}" }
     sequence(:url) { |n| "url-#{n}" }
     sequence(:avatar_url) { |n| "avatar #{n}" }
-    sequence(:provider) { |n| "github" }
+    sequence(:provider) { |_n| 'github' }
   end
 end
