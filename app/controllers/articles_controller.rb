@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :authorize!, only: [:create]
+  before_action :authorize!, only: [:create] # add update
 
   def index
     articles = Article.newest
@@ -22,7 +22,7 @@ class ArticlesController < ApplicationController
 
   def update
     article = Article.find(params[:id])
-    article.update(**params[:data][:attributes])
+    article.update(valid_params)
   end
 
   private

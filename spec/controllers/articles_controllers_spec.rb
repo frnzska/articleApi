@@ -96,4 +96,19 @@ describe ArticlesController do
       end
     end
   end
+
+  describe '#update' do
+    context 'successful update' do
+      let(:article) { create :article }
+      let(:valid_params) do
+        { 'data' => { 'attributes' =>
+            { 'title' => 'my test title', 'content' => 'my test content', 'slug' => 'my-test-slug' } } }
+      end
+      it 'should update the article' do
+        put :update, params: { 'id' => article.id.to_s, 'data' => { 'attributes' =>
+            { 'title' => 'a new fresh title' } } }
+        expect(Article.find(article.id).title).to eq('a new fresh title')
+      end
+    end
+  end
 end
