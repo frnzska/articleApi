@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :authorize!, only: [:create] # add update
+  before_action :authorize!, only: %i[create update]
 
   def index
     articles = Article.newest
@@ -23,6 +23,9 @@ class ArticlesController < ApplicationController
   def update
     article = Article.find(params[:id])
     article.update(valid_params)
+    render json: article, status: 201
+  rescue StandardError
+    render json: { "message": 'again too lazy to properly implement this error msg.' }, status: 422
   end
 
   private
