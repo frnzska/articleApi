@@ -96,4 +96,30 @@ describe ArticlesController do
       end
     end
   end
+
+  describe '#update' do
+    let(:user) { create :user }
+    let(:access_token) { user.create_access_token }
+    let(:article) { create :article }
+    let(:valid_update_params) do
+      { 'id' => article.id.to_s, 'data' => { 'attributes' =>
+          { 'title' => 'a new fresh title' } } }
+    end
+
+    context 'correct paramters' do
+      before { request.headers['authorization'] = "Bearer #{access_token.token}" }
+      it 'should update the article' do
+        put :update, params: valid_update_params
+        expect(Article.find(article.id).title).to eq('a new fresh title')
+      end
+    end
+
+    context 'incorrect header' do
+      it 'should return error when no header' do
+        request.headers['authorization'] = 'Invalid'
+        put :update, params: valid_update_params
+        expect(response).to have_http_status(403)
+      end
+    end
+  end
 end
