@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::API
-  class AuthorizationError < StandardError
-  end
+  class AuthorizationError < StandardError; end
 
   rescue_from UserAuthenticator::AuthenticationError, with: :authentication_error
   rescue_from AuthorizationError, with: :authorization_error
+  rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity_error
 
   private
 
@@ -23,6 +23,15 @@ class ApplicationController < ActionController::API
       'title' => 'Access forbidden',
       'detail' => 'You are not authorized to access the resource.'
     } }, status: 403
+  end
+
+  def unprocessable_entity_error
+    render json: { "errors": {
+      'status' => '422',
+      'source' => { 'pointer' => '/request' },
+      'title' => 'Uprocessable Entity',
+      'detail' => 'Server is unable to process the contained instructions.'
+    } }, status: 422
   end
 
   def authorize!
