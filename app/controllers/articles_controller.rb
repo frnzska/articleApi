@@ -15,17 +15,14 @@ class ArticlesController < ApplicationController
   def create
     attributes = valid_params
     article = Article.create(**attributes)
+    article.save!
     render json: article, status: 201
-  rescue StandardError
-    render json: { "message": 'too lazy to properly implement this error msg right now.' }, status: 422
   end
 
   def update
     article = Article.find(params[:id])
     article.update(valid_params)
     render json: article, status: 201
-  rescue StandardError
-    render json: { "message": 'again too lazy to properly implement this error msg.' }, status: 422
   end
 
   private

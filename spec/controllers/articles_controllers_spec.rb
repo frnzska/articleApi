@@ -91,7 +91,12 @@ describe ArticlesController do
       end
 
       it 'but invalid parameters are provided return Unprocessable Entity Code' do
-        post :create, params: { something: 'something' }
+        post :create, params: { data: {
+          attributes: {
+            title: '',
+            content: ''
+          }
+        } }
         expect(response).to have_http_status(422)
       end
     end
