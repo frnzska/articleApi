@@ -16,4 +16,8 @@ describe 'routing to articles' do
   it 'should routes /update to articles#update' do
     expect(put('/articles/1')).to route_to('articles#update', id: '1')
   end
+
+  it 'should routes /destroy to articles#destroy' do
+    expect(delete('/articles/1')).to route_to('articles#destroy', id: '1')
+  end
 end

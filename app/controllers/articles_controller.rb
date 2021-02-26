@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :authorize!, only: %i[create update]
+  before_action :authorize!, only: %i[create update destroy]
 
   def index
     articles = Article.newest
@@ -14,15 +14,19 @@ class ArticlesController < ApplicationController
 
   def create
     attributes = valid_params
-    article = Article.create(**attributes)
+    article = @current_user.articles.create(**attributes)
     article.save!
     render json: article, status: 201
   end
 
   def update
-    article = Article.find(params[:id])
+    article = @current_user.articles.find(params[:id])
     article.update(valid_params)
     render json: article, status: 201
+  end
+
+  def destroy
+    Article.delete(params[:id])
   end
 
   private

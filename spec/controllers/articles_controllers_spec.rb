@@ -105,7 +105,7 @@ describe ArticlesController do
   describe '#update' do
     let(:user) { create :user }
     let(:access_token) { user.create_access_token }
-    let(:article) { create :article }
+    let(:article) { create :article, user: user  }
     let(:valid_update_params) do
       { 'id' => article.id.to_s, 'data' => { 'attributes' =>
           { 'title' => 'a new fresh title' } } }
